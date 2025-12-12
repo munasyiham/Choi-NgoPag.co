@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Form Pemesanan</title>
+<link rel="stylesheet" href="css/bootstrap.min.css">
+</head>
+
+<body class="p-4">
+
+<h3>Form Pemesanan</h3>
+<p>Silakan isi data berikut sebelum melanjutkan ke WhatsApp.</p>
+
+<form id="orderForm">
+
+    <label>Nama Lengkap:</label>
+    <input type="text" class="form-control mb-2" id="nama" required>
+
+    <label>No. HP:</label>
+    <input type="text" class="form-control mb-2" id="hp" required>
+
+    <label>Email:</label>
+    <input type="email" class="form-control mb-2" id="email" required>
+
+    <label>Alamat Lengkap:</label>
+    <textarea class="form-control mb-3" id="alamat" required></textarea>
+
+    <button type="button" onclick="kirimWA()" class="btn btn-success w-100">
+        Kirim Pesanan ke WhatsApp
+    </button>
+
+</form>
+
+<script src="js/config.js"></script>
+<script src="js/cart.js"></script>
+
+<script>
+function kirimWA() {
+    const nama = document.getElementById("nama").value;
+    const hp = document.getElementById("hp").value;
+    const email = document.getElementById("email").value;
+    const alamat = document.getElementById("alamat").value;
+
+    const cart = getCart();
+    if (cart.length === 0) {
+        alert("Keranjang masih kosong!");
+        return;
+    }
+
+    // format daftar pesanan
+    let daftarPesanan = cart.map(p => `- ${p.name} (Rp ${p.price})`).join("\n");
+
+    const nomorWA = "6287829383526";
+
+    const pesan = 
+`Halo, saya ingin memesan:
+${daftarPesanan}
+
+Data Saya:
+Nama: ${nama}
+HP: ${hp}
+Email: ${email}
+Alamat: ${alamat}
+`;
+
+    const url = "https://wa.me/" + nomorWA + "?text=" + encodeURIComponent(pesan);
+
+    window.open(url, "_blank");
+}
+</script>
+
+</body>
+</html>

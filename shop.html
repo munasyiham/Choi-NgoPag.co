@@ -1,0 +1,438 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="author" content="Choi.std">
+  <link rel="shortcut icon" href="ngopag.png">
+
+  <meta name="description" content="" />
+  <meta name="keywords" content="bootstrap, bootstrap4" />
+
+  <!-- Bootstrap CSS -->
+  <link href="css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+  <link href="css/tiny-slider.css" rel="stylesheet">
+  <link href="css/style.css" rel="stylesheet">
+  <title>NgoPag by Choi.std - Katalog</title>
+
+  <style>
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes scaleUp {
+      from { opacity: 0; transform: scale(0.8); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    .animate-fade-in { animation: fadeIn 1s ease-out; }
+    .animate-scale-up { animation: scaleUp 0.8s ease-out; }
+    .product-item {
+      transition: transform .3s, box-shadow .3s;
+    }
+    .product-item:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 10px 30px rgba(0,0,0,.15);
+    }
+    .product-item img {
+      transition: transform .3s;
+    }
+    .product-item:hover img {
+      transform: scale(1.05);
+    }
+    .btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 5px 20px rgba(0,0,0,.2);
+    }
+
+    /* Popup Styles */
+    .popup-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      backdrop-filter: blur(4px);
+      z-index: 9999;
+    }
+    .popup-box {
+      width: 90%;
+      max-width: 500px;
+      background: #fff;
+      padding: 25px;
+      border-radius: 15px;
+      animation: scaleIn 0.3s ease;
+      position: relative;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+    .promo-box {
+      max-width: 500px;
+      text-align: center;
+    }
+    @keyframes scaleIn {
+      from { transform: scale(0.8); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+    .close-btn {
+      background: transparent;
+      border: none;
+      font-size: 22px;
+      position: absolute;
+      right: 20px;
+      top: 15px;
+      cursor: pointer;
+      z-index: 10;
+    }
+    .promo-img {
+      width: 100%;
+      max-width: 300px;
+      margin: 0 auto 20px;
+      border-radius: 10px;
+    }
+    .promo-title {
+      color: #3b5d50;
+      margin-bottom: 15px;
+    }
+    .promo-desc {
+      font-size: 16px;
+      margin-bottom: 20px;
+    }
+    .promo-code {
+      background: #f8f9fa;
+      padding: 15px;
+      border-radius: 8px;
+      font-size: 18px;
+      border: 2px dashed #3b5d50;
+    }
+
+    /* Cart Item Styles */
+    .cart-item {
+      background: #f8f9fa;
+      padding: 15px;
+      border-radius: 10px;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    .cart-item img {
+      width: 60px;
+      height: 60px;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+    .cart-item-info {
+      flex: 1;
+    }
+    .cart-item-name {
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+    .cart-item-price {
+      color: #3b5d50;
+      font-weight: 600;
+    }
+    .quantity-controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .qty-btn {
+      width: 30px;
+      height: 30px;
+      border: none;
+      background: #3b5d50;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    .qty-btn:hover {
+      background: #2f4f4f;
+    }
+    .qty-display {
+      min-width: 30px;
+      text-align: center;
+      font-weight: 600;
+    }
+    .remove-btn {
+      background: #dc3545;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 12px;
+    }
+    .remove-btn:hover {
+      background: #c82333;
+    }
+    .cart-total {
+      background: #3b5d50;
+      color: white;
+      padding: 15px;
+      border-radius: 10px;
+      text-align: center;
+      margin-top: 15px;
+      font-size: 18px;
+      font-weight: 600;
+    }
+    .empty-cart {
+      text-align: center;
+      padding: 40px 20px;
+      color: #999;
+    }
+    .empty-cart i {
+      font-size: 4rem;
+      margin-bottom: 15px;
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<nav class="custom-navbar navbar navbar-expand-md navbar-dark bg-dark">
+  <div class="container">
+    <a class="navbar-brand" href="index.html">NgoPag<span>.co</span></a>
+
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsFurni">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarsFurni">
+      <ul class="custom-navbar-nav navbar-nav ms-auto mb-2 mb-md-0">
+        <li class="nav-item"><a class="nav-link" href="index.html">Beranda</a></li>
+        <li class="active nav-item"><a class="nav-link" href="shop.html">Katalog</a></li>
+        <li><a class="nav-link" href="about.html">Tentang Kami</a></li>
+        <li><a class="nav-link" href="contact.html">Kontak Kami</a></li>
+      </ul>
+
+      <ul class="custom-navbar-cta navbar-nav mb-2 mb-md-0 ms-5">
+        <li class="nav-item">
+          <a href="#" class="nav-link" onclick="bukaCart(event)">
+          <i class="fas fa-shopping-cart"></i>
+          <span id="cartCount" style="background:red;color:white;padding:2px 6px;border-radius:50%;font-size:12px;position:absolute;margin-left:-5px;">0</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="container">
+    <div class="row justify-content-between">
+      <div class="col-lg-5">
+        <div class="intro-excerpt animate-fade-in">
+          <h1>Katalog Produk</h1>
+          <p class="mb-4">Temukan berbagai pilihan kopi premium yang telah kami seleksi dengan teliti.</p>
+        </div>
+      </div>
+      <div class="col-lg-7">
+        <div class="hero-img-wrap animate-scale-up">
+          <img src="images/KoPag.png" class="img-fluid">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PRODUK -->
+<div class="untree_co-section product-section before-footer-section">
+  <div class="container">
+    <div class="row">
+
+      <!-- PRODUCT 1 -->
+      <div class="col-12 col-md-4 col-lg-3 mb-5 animate-fade-in">
+        <div class="product-item">
+          <img src="images/Produk/p1.jpeg" class="img-fluid product-thumbnail" id="img-1">
+          <h3 class="product-title">Gayo Wine Specialty 200g</h3>
+          <strong class="product-price">Rp 89.000</strong>
+          <br>
+          <button class="btn btn-primary btn-sm mt-3"
+            onclick="tambahKeKeranjang(1, 'Gayo Wine Specialty 200g', '89.000', 'images/Produk/p1.jpeg')">
+            <i class="fas fa-cart-plus me-1"></i> Tambah ke Keranjang
+          </button>
+        </div>
+      </div>
+
+      <!-- PRODUCT 2 -->
+      <div class="col-12 col-md-4 col-lg-3 mb-5 animate-fade-in">
+        <div class="product-item">
+          <img src="images/Produk/p2.jpeg" class="img-fluid product-thumbnail" id="img-2">
+          <h3 class="product-title">Watermelon Magic 1Kg</h3>
+          <strong class="product-price">Rp 423.000</strong>
+          <br>
+          <button class="btn btn-primary btn-sm mt-3"
+            onclick="tambahKeKeranjang(2, 'Watermelon Magic 1Kg', '423.000', 'images/Produk/p2.jpeg')">
+            <i class="fas fa-cart-plus me-1"></i> Tambah ke Keranjang
+          </button>
+        </div>
+      </div>
+
+      <!-- PRODUCT 3 -->
+      <div class="col-12 col-md-4 col-lg-3 mb-5 animate-fade-in">
+        <div class="product-item">
+          <img src="images/Produk/p3.jpeg" class="img-fluid product-thumbnail" id="img-3">
+          <h3 class="product-title">Mango Macarons 200g</h3>
+          <strong class="product-price">Rp 89.000</strong>
+          <br>
+          <button class="btn btn-primary btn-sm mt-3"
+            onclick="tambahKeKeranjang(3, 'Mango Macarons 200g', '89.000', 'images/Produk/p3.jpeg')">
+            <i class="fas fa-cart-plus me-1"></i> Tambah ke Keranjang
+          </button>
+        </div>
+      </div>
+
+      <!-- PRODUCT 4 -->
+      <div class="col-12 col-md-4 col-lg-3 mb-5 animate-fade-in">
+        <div class="product-item">
+          <img src="images/Produk/p4.jpeg" class="img-fluid product-thumbnail" id="img-4">
+          <h3 class="product-title">Strawberry Sweet Plasa 200g</h3>
+          <strong class="product-price">Rp 89.000</strong>
+          <br>
+          <button class="btn btn-primary btn-sm mt-3"
+            onclick="tambahKeKeranjang(4, 'Strawberry Sweet Plasa 200g', '89.000', 'images/Produk/p4.jpeg')">
+            <i class="fas fa-cart-plus me-1"></i> Tambah ke Keranjang
+          </button>
+        </div>
+      </div>
+
+      <!-- PRODUCT 5 -->
+      <div class="col-12 col-md-4 col-lg-3 mb-5 animate-fade-in">
+        <div class="product-item">
+          <img src="images/Produk/p5.jpeg" class="img-fluid product-thumbnail" id="img-5">
+          <h3 class="product-title">Vanilla Apple Fuji 200g</h3>
+          <strong class="product-price">Rp 89.000</strong>
+          <br>
+          <button class="btn btn-primary btn-sm mt-3"
+            onclick="tambahKeKeranjang(5, 'Vanilla Apple Fuji 200g', '89.000', 'images/Produk/p5.jpeg')">
+            <i class="fas fa-cart-plus me-1"></i> Tambah ke Keranjang
+          </button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- CHECKOUT BUTTON -->
+    <div class="text-center mt-5">
+      <button class="btn btn-warning btn-lg" onclick="langkahCheckout()">
+        <i class="fas fa-shopping-bag me-2"></i> Checkout Pesanan
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="footer-section">
+  <div class="container relative">
+    <div class="sofa-img">
+      <img src="images/kopibg.png" alt="Image" class="img-fluid">
+    </div>
+
+    <div class="row">
+      <div class="col-lg-8">
+        <div class="subscription-form">
+          <h3 class="d-flex align-items-center">
+            <span class="me-1"><img src="images/envelope-outline.svg"></span>
+            <span>Hubungi Kami Melalui WhatsApp</span>
+          </h3>
+          <a href="https://wa.me/6287829383526" class="btn btn-primary mt-3">
+            <i class="fab fa-whatsapp me-2"></i> Chat WhatsApp
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="row g-5 mb-5">
+      <div class="col-lg-4">
+        <div class="mb-4 footer-logo-wrap"><a href="#" class="footer-logo">NgoPag.</a></div>
+        <p class="mb-4">Satu cangkir, ribuan kemungkinan. Kopi memberi kita lebih dari sekadar rasa kafein di dalamnya meningkatkan energi, fokus, dan produktivitas. Mulai hari dengan kopi, selesaikan dengan pencapaian</p>
+      </div>
+    </div>
+
+  </div>
+</footer>
+
+<!-- POPUP PROMO -->
+<div id="promoPopup" class="popup-overlay">
+  <div class="popup-box promo-box">
+    <button class="close-btn" onclick="tutupPromo()">✖</button>
+    <img src="images/promo.png" class="promo-img" alt="Promo">
+    <h2 class="promo-title">🎉 Promo Spesial Hari Ini!</h2>
+    <p class="promo-desc">Nikmati <b>DISKON 10%</b> untuk semua produk kopi premium kami.</p>
+    <div class="promo-code">Kode Promo: <b>NGOPAG10</b></div>
+    <button class="btn btn-primary w-100 mt-3" onclick="tutupPromo()">Mengerti 👍</button>
+  </div>
+</div>
+
+<!-- CART PREVIEW -->
+<div id="cartPreview" class="popup-overlay" style="display:none;">
+  <div class="popup-box">
+    <button class="close-btn" onclick="tutupCart()">✖</button>
+    <h3 class="text-center mb-4"><i class="fas fa-shopping-cart me-2"></i>Keranjang Belanja</h3>
+    <div id="cartItems"></div>
+  </div>
+</div>
+
+<!-- POPUP CHECKOUT -->
+<div id="checkoutModal" class="popup-overlay" style="display:none;">
+  <div class="popup-box">
+    <button class="close-btn" onclick="tutupCheckout()">✖</button>
+    <h3 class="text-center mb-3"><i class="fas fa-clipboard-list me-2"></i>Form Pemesanan</h3>
+    
+    <label><i class="fas fa-user me-2"></i>Nama Lengkap:</label>
+    <input type="text" id="formNama" class="form-control mb-2" placeholder="Masukkan nama lengkap" required>
+    
+    <label><i class="fas fa-phone me-2"></i>No HP/WhatsApp:</label>
+    <input type="text" id="formHp" class="form-control mb-2" placeholder="08xxxxxxxxxx" required>
+    
+    <label><i class="fas fa-envelope me-2"></i>Email:</label>
+    <input type="email" id="formEmail" class="form-control mb-2" placeholder="email@example.com" required>
+    
+    <label><i class="fas fa-map-marker-alt me-2"></i>Alamat Lengkap:</label>
+    <textarea id="formAlamat" class="form-control mb-3" rows="3" placeholder="Jalan, Kecamatan, Kota, Provinsi" required></textarea>
+    
+    <div class="cart-total mb-3" id="checkoutTotal"></div>
+    
+    <button class="btn btn-success w-100" onclick="kirimCheckoutWA()">
+      <i class="fab fa-whatsapp me-2"></i>Kirim Pesanan via WhatsApp
+    </button>
+  </div>
+</div>
+
+<!-- JS WAJIB -->
+<script src="js/bootstrap.bundle.min.js"></script>
+<script src="js/tiny-slider.js"></script>
+<script src="js/custom.js"></script>
+<script src="js/cart.js"></script>
+
+<script>
+// Debug: Check if cart.js loaded
+console.log('Shop page loaded');
+console.log('tambahKeKeranjang function:', typeof window.tambahKeKeranjang);
+console.log('langkahCheckout function:', typeof window.langkahCheckout);
+console.log('bukaCart function:', typeof window.bukaCart);
+
+// Pastikan semua fungsi tersedia
+if (typeof window.tambahKeKeranjang === 'undefined') {
+  console.error('ERROR: tambahKeKeranjang function not loaded!');
+  alert('ERROR: Cart system tidak terload. Silakan refresh halaman.');
+}
+
+// Test button click
+document.addEventListener('DOMContentLoaded', function() {
+  console.log('DOM ready, cart count:', document.getElementById('cartCount')?.innerText);
+});
+</script>
+
+</body>
+</html>

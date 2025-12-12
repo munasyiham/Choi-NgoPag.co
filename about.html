@@ -1,0 +1,516 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="author" content="Choi.std">
+  <link rel="shortcut icon" href="ngopag.png">
+
+  <meta name="description" content="" />
+  <meta name="keywords" content="bootstrap, bootstrap4" />
+
+	<!-- Bootstrap CSS -->
+	<link href="css/bootstrap.min.css" rel="stylesheet">
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+	<link href="css/tiny-slider.css" rel="stylesheet">
+	<link href="css/style.css" rel="stylesheet">
+	<title>NgoPag by Choi.std - About Us</title>
+	
+	<style>
+		/* Animasi */
+		@keyframes fadeIn {
+			from { opacity: 0; transform: translateY(30px); }
+			to { opacity: 1; transform: translateY(0); }
+		}
+		@keyframes scaleUp {
+			from { opacity: 0; transform: scale(0.8); }
+			to { opacity: 1; transform: scale(1); }
+		}
+		@keyframes slideInLeft {
+			from { opacity: 0; transform: translateX(-50px); }
+			to { opacity: 1; transform: translateX(0); }
+		}
+		@keyframes slideInRight {
+			from { opacity: 0; transform: translateX(50px); }
+			to { opacity: 1; transform: translateX(0); }
+		}
+		
+		.animate-fade-in { animation: fadeIn 1s ease-out; }
+		.animate-scale-up { animation: scaleUp 0.8s ease-out; }
+		.animate-slide-left { animation: slideInLeft 1s ease-out; }
+		.animate-slide-right { animation: slideInRight 1s ease-out; }
+		
+		.feature {
+			transition: transform 0.3s ease, box-shadow 0.3s ease;
+		}
+		.feature:hover {
+			transform: translateY(-10px);
+			box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+		}
+		.value-item {
+			transition: transform 0.3s ease;
+		}
+		.value-item:hover {
+			transform: scale(1.05);
+		}
+		.value-item .icon i {
+			transition: color 0.3s ease, transform 0.3s ease;
+		}
+		.value-item:hover .icon i {
+			color: #2f4f4f !important;
+			transform: scale(1.1);
+		}
+
+		/* Popup Styles */
+		.popup-overlay {
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background: rgba(0, 0, 0, 0.5);
+			display: none;
+			justify-content: center;
+			align-items: center;
+			backdrop-filter: blur(4px);
+			z-index: 9999;
+		}
+		.popup-box {
+			width: 90%;
+			max-width: 500px;
+			background: #fff;
+			padding: 25px;
+			border-radius: 15px;
+			animation: scaleIn 0.3s ease;
+			position: relative;
+			max-height: 90vh;
+			overflow-y: auto;
+		}
+		.promo-box {
+			max-width: 500px;
+			text-align: center;
+		}
+		@keyframes scaleIn {
+			from { transform: scale(0.8); opacity: 0; }
+			to { transform: scale(1); opacity: 1; }
+		}
+		.close-btn {
+			background: transparent;
+			border: none;
+			font-size: 22px;
+			position: absolute;
+			right: 20px;
+			top: 15px;
+			cursor: pointer;
+			z-index: 10;
+		}
+		.promo-img {
+			width: 100%;
+			max-width: 300px;
+			margin: 0 auto 20px;
+			border-radius: 10px;
+		}
+		.promo-title {
+			color: #3b5d50;
+			margin-bottom: 15px;
+		}
+		.promo-desc {
+			font-size: 16px;
+			margin-bottom: 20px;
+		}
+		.promo-code {
+			background: #f8f9fa;
+			padding: 15px;
+			border-radius: 8px;
+			font-size: 18px;
+			border: 2px dashed #3b5d50;
+		}
+
+		/* Cart Item Styles */
+		.cart-item {
+			background: #f8f9fa;
+			padding: 15px;
+			border-radius: 10px;
+			margin-bottom: 10px;
+			display: flex;
+			align-items: center;
+			gap: 15px;
+		}
+		.cart-item img {
+			width: 60px;
+			height: 60px;
+			object-fit: cover;
+			border-radius: 8px;
+		}
+		.cart-item-info {
+			flex: 1;
+		}
+		.cart-item-name {
+			font-weight: 600;
+			margin-bottom: 5px;
+		}
+		.cart-item-price {
+			color: #3b5d50;
+			font-weight: 600;
+		}
+		.quantity-controls {
+			display: flex;
+			align-items: center;
+			gap: 10px;
+		}
+		.qty-btn {
+			width: 30px;
+			height: 30px;
+			border: none;
+			background: #3b5d50;
+			color: white;
+			border-radius: 5px;
+			cursor: pointer;
+			font-weight: bold;
+		}
+		.qty-btn:hover {
+			background: #2f4f4f;
+		}
+		.qty-display {
+			min-width: 30px;
+			text-align: center;
+			font-weight: 600;
+		}
+		.remove-btn {
+			background: #dc3545;
+			color: white;
+			border: none;
+			padding: 5px 10px;
+			border-radius: 5px;
+			cursor: pointer;
+			font-size: 12px;
+		}
+		.remove-btn:hover {
+			background: #c82333;
+		}
+		.cart-total {
+			background: #3b5d50;
+			color: white;
+			padding: 15px;
+			border-radius: 10px;
+			text-align: center;
+			margin-top: 15px;
+			font-size: 18px;
+			font-weight: 600;
+		}
+		.empty-cart {
+			text-align: center;
+			padding: 40px 20px;
+			color: #999;
+		}
+		.empty-cart i {
+			font-size: 4rem;
+			margin-bottom: 15px;
+		}
+	</style>
+</head>
+
+<body>
+
+	<!-- Start Header/Navigation -->
+	<nav class="custom-navbar navbar navbar navbar-expand-md navbar-dark bg-dark" arial-label="Furni navigation bar">
+		<div class="container">
+			<a class="navbar-brand" href="index.html">NgoPag<span>.co</span></a>
+
+			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsFurni" aria-controls="navbarsFurni" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+
+			<div class="collapse navbar-collapse" id="navbarsFurni">
+				<ul class="custom-navbar-nav navbar-nav ms-auto mb-2 mb-md-0">
+					<li class="nav-item">
+						<a class="nav-link" href="index.html">Beranda</a>
+					</li>
+					<li><a class="nav-link" href="shop.html">Katalog</a></li>
+					<li class="active"><a class="nav-link" href="about.html">Tentang Kami</a></li>
+					<li><a class="nav-link" href="contact.html">Kontak Kami</a></li>
+				</ul>
+
+				<ul class="custom-navbar-cta navbar-nav mb-2 mb-md-0 ms-5">
+					<li class="nav-item">
+						<a href="#" class="nav-link" onclick="bukaCart(event)">
+							<i class="fas fa-shopping-cart"></i>
+							<span id="cartCount" style="background:red;color:white;padding:2px 6px;border-radius:50%;font-size:12px;position:absolute;margin-left:-5px;">0</span>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+	<!-- End Header/Navigation -->
+
+	<!-- Start Hero Section -->
+	<div class="hero">
+		<div class="container">
+			<div class="row justify-content-between">
+				<div class="col-lg-5">
+					<div class="intro-excerpt animate-fade-in">
+						<h1>Tentang Kami</h1>
+						<p class="mb-4">NgoPag.co adalah destinasi terbaik untuk para pecinta kopi berkualitas. Kami berkomitmen menghadirkan biji kopi pilihan dari berbagai daerah di Indonesia dengan cita rasa yang autentik dan berkarakter.</p>
+						<p><a href="shop.html" class="btn btn-secondary me-2">Belanja Sekarang</a><a href="contact.html" class="btn btn-white-outline">Hubungi Kami</a></p>
+					</div>
+				</div>
+				<div class="col-lg-7">
+					<div class="hero-img-wrap animate-scale-up">
+						<img src="images/KoPag.png" class="img-fluid">
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- End Hero Section -->
+
+	<!-- Start Why Choose Us Section -->
+	<div class="why-choose-section">
+		<div class="container">
+			<div class="row justify-content-between align-items-center">
+				<div class="col-lg-6 animate-slide-left">
+					<h2 class="section-title">Kenapa Memilih Kami?</h2>
+					<p>Kami tidak hanya menjual kopi, tetapi memberikan pengalaman menikmati kopi berkualitas tinggi yang dipilih langsung dari petani lokal terbaik di Indonesia.</p>
+
+					<div class="row my-5">
+						<div class="col-6 col-md-6">
+							<div class="feature">
+								<div class="icon">
+									<img src="images/truck.svg" alt="Image" class="imf-fluid">
+								</div>
+								<h3>Pengiriman Cepat &amp; Gratis</h3>
+								<p>Gratis ongkir untuk seluruh Pulau Jawa dengan pengiriman yang cepat dan aman.</p>
+							</div>
+						</div>
+
+						<div class="col-6 col-md-6">
+							<div class="feature">
+								<div class="icon">
+									<img src="images/bag.svg" alt="Image" class="imf-fluid">
+								</div>
+								<h3>Mudah Berbelanja</h3>
+								<p>Proses pemesanan yang mudah melalui website kami dengan sistem pembayaran yang aman.</p>
+							</div>
+						</div>
+
+						<div class="col-6 col-md-6">
+							<div class="feature">
+								<div class="icon">
+									<img src="images/support.svg" alt="Image" class="imf-fluid">
+								</div>
+								<h3>Konsultasi 24/7</h3>
+								<p>Tim kami siap membantu Anda kapan saja untuk konsultasi produk dan pemesanan.</p>
+							</div>
+						</div>
+
+						<div class="col-6 col-md-6">
+							<div class="feature">
+								<div class="icon">
+									<img src="images/return.svg" alt="Image" class="imf-fluid">
+								</div>
+								<h3>Jaminan Kualitas</h3>
+								<p>Produk berkualitas tinggi dengan jaminan kepuasan 100% atau uang kembali.</p>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-lg-5 animate-slide-right">
+					<div class="img-wrap">
+						<img src="images/bgkopi.png" alt="Image" class="img-fluid">
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- End Why Choose Us Section -->
+
+	<!-- Start Our Story Section -->
+	<div class="untree_co-section">
+		<div class="container">
+			<div class="row mb-5">
+				<div class="col-lg-10 mx-auto text-center animate-fade-in">
+					<h2 class="section-title">Asal Usul NgoPag.co</h2>
+					<p class="mb-4" style="text-align: justify;">
+						NgoPag.co lahir dari sebuah kebiasaan sederhana: <strong>"Ngopi Pagi"</strong> - ritual menikmati secangkir kopi hangat di pagi hari yang telah menjadi bagian tak terpisahkan dari kehidupan masyarakat Indonesia. Nama "NgoPag" sendiri merupakan singkatan dari "Ngopi Pagi", sebuah momen sakral bagi para pecinta kopi untuk memulai hari dengan penuh semangat dan energi positif.
+					</p>
+					<p class="mb-4" style="text-align: justify;">
+						Berawal dari tahun 2018, ketika pendiri kami, seorang penikmat kopi sejati, melakukan perjalanan keliling Indonesia untuk mencari biji kopi terbaik. Dari dataran tinggi Gayo di Aceh, pegunungan Toraja di Sulawesi, hingga lereng gunung di Flores, perjalanan tersebut membuka mata kami akan kekayaan cita rasa kopi nusantara yang luar biasa. Setiap daerah memiliki karakteristik unik yang tercermin dalam setiap tegukan kopi mereka.
+					</p>
+					<p class="mb-4" style="text-align: justify;">
+						Namun, kami menemukan satu masalah: banyak kopi berkualitas tinggi dari petani lokal yang sulit diakses oleh masyarakat luas. Di sinilah ide NgoPag.co lahir - menjadi jembatan antara petani kopi lokal dengan para penikmat kopi di seluruh Indonesia. Kami bermitra langsung dengan petani, memastikan mereka mendapatkan harga yang adil, sementara pelanggan kami menikmati kopi segar berkualitas premium.
+					</p>
+					<p class="mb-4" style="text-align: justify;">
+						Filosofi kami sederhana: <strong>"Setiap pagi adalah awal yang baru, dan setiap cangkir kopi adalah kesempatan untuk merasakan kehangatan dan kebahagiaan."</strong> NgoPag.co bukan hanya tentang menjual kopi, tetapi tentang berbagi pengalaman, cerita, dan kecintaan terhadap kopi Indonesia yang luar biasa. Kami percaya bahwa kopi terbaik adalah kopi yang dibuat dengan cinta, dari petani yang memanen dengan hati, hingga Anda yang menyeduhnya setiap pagi.
+					</p>
+					<p style="text-align: justify;">
+						Hari ini, NgoPag.co telah melayani ribuan pelanggan di seluruh Indonesia, dan kami terus berkomitmen untuk menghadirkan pengalaman "ngopi pagi" terbaik melalui produk-produk pilihan kami. Mari bersama-sama merayakan kekayaan kopi Indonesia, satu cangkir pada satu waktu.
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- End Our Story Section -->
+
+	<!-- Start Values Section -->
+	<div class="untree_co-section bg-light before-footer-section">
+		<div class="container">
+			<div class="row mb-5">
+				<div class="col-lg-8 mx-auto text-center animate-fade-in">
+					<h2 class="section-title">Nilai-Nilai Kami</h2>
+					<p>Prinsip yang kami pegang teguh dalam setiap langkah perjalanan kami</p>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-12 col-md-6 col-lg-3 mb-5 mb-lg-0">
+					<div class="text-center value-item">
+						<div class="icon mb-4">
+							<i class="fas fa-leaf" style="font-size: 3rem; color: #3b5d50;"></i>
+						</div>
+						<h3>Keberlanjutan</h3>
+						<p>Kami mendukung praktik pertanian yang berkelanjutan dan ramah lingkungan untuk masa depan yang lebih baik.</p>
+					</div>
+				</div>
+
+				<div class="col-12 col-md-6 col-lg-3 mb-5 mb-lg-0">
+					<div class="text-center value-item">
+						<div class="icon mb-4">
+							<i class="fas fa-award" style="font-size: 3rem; color: #3b5d50;"></i>
+						</div>
+						<h3>Kualitas Premium</h3>
+						<p>Setiap produk dipilih dengan standar kualitas tertinggi untuk kepuasan pelanggan.</p>
+					</div>
+				</div>
+
+				<div class="col-12 col-md-6 col-lg-3 mb-5 mb-lg-0">
+					<div class="text-center value-item">
+						<div class="icon mb-4">
+							<i class="fas fa-handshake" style="font-size: 3rem; color: #3b5d50;"></i>
+						</div>
+						<h3>Kemitraan Adil</h3>
+						<p>Kami bekerja langsung dengan petani lokal dengan harga yang adil dan menguntungkan.</p>
+					</div>
+				</div>
+
+				<div class="col-12 col-md-6 col-lg-3 mb-5 mb-lg-0">
+					<div class="text-center value-item">
+						<div class="icon mb-4">
+							<i class="fas fa-heart" style="font-size: 3rem; color: #3b5d50;"></i>
+						</div>
+						<h3>Passion</h3>
+						<p>Kecintaan kami terhadap kopi mendorong kami untuk terus berinovasi dan memberikan yang terbaik.</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- End Values Section -->
+
+	<!-- Start Footer Section -->
+	<footer class="footer-section">
+		<div class="container relative">
+			<div class="sofa-img">
+				<img src="images/kopibg.png" alt="Image" class="img-fluid">
+			</div>
+
+			<div class="row">
+				<div class="col-lg-8">
+					<div class="subscription-form">
+						<h3 class="d-flex align-items-center"><span class="me-1"><img src="images/envelope-outline.svg" alt="Image" class="img-fluid"></span><span>Hubungi Kami Melalui WhatsApp</span></h3>
+						<div class="row g-3">
+							<div class="col-auto">
+								<a href="https://wa.me/6287829383526" target="_blank" class="btn btn-primary">
+									<i class="fab fa-whatsapp me-2"></i> Chat WhatsApp
+								</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="row g-5 mb-5">
+				<div class="col-lg-4">
+					<div class="mb-4 footer-logo-wrap"><a href="#" class="footer-logo">NgoPag.</a></div>
+					<p class="mb-4">Satu cangkir, ribuan kemungkinan. Kopi memberi kita lebih dari sekadar rasa kafein di dalamnya meningkatkan energi, fokus, dan produktivitas. Mulai hari dengan kopi, selesaikan dengan pencapaian</p>
+				</div>
+			</div>
+		</div>
+	</footer>
+	<!-- End Footer Section -->
+
+	<!-- POPUP PROMO -->
+	<div id="promoPopup" class="popup-overlay">
+		<div class="popup-box promo-box">
+			<button class="close-btn" onclick="tutupPromo()">✖</button>
+			<img src="images/promo.png" class="promo-img" alt="Promo">
+			<h2 class="promo-title">🎉 Promo Spesial Hari Ini!</h2>
+			<p class="promo-desc">Nikmati <b>DISKON 10%</b> untuk semua produk kopi premium kami.</p>
+			<div class="promo-code">Kode Promo: <b>NGOPAG10</b></div>
+			<button class="btn btn-primary w-100 mt-3" onclick="tutupPromo()">Mengerti 👍</button>
+		</div>
+	</div>
+
+	<!-- POPUP CART PREVIEW -->
+	<div id="cartPreview" class="popup-overlay" style="display:none;">
+		<div class="popup-box">
+			<button class="close-btn" onclick="tutupCart()">✖</button>
+			<h3 class="text-center mb-4"><i class="fas fa-shopping-cart me-2"></i>Keranjang Belanja</h3>
+			<div id="cartItems"></div>
+		</div>
+	</div>
+
+	<!-- POPUP CHECKOUT FORM -->
+	<div id="checkoutModal" class="popup-overlay" style="display:none;">
+		<div class="popup-box">
+			<button class="close-btn" onclick="tutupCheckout()">✖</button>
+			<h3 class="text-center mb-3"><i class="fas fa-clipboard-list me-2"></i>Form Pemesanan</h3>
+			
+			<label><i class="fas fa-user me-2"></i>Nama Lengkap:</label>
+			<input type="text" id="formNama" class="form-control mb-2" placeholder="Masukkan nama lengkap" required>
+			
+			<label><i class="fas fa-phone me-2"></i>No HP/WhatsApp:</label>
+			<input type="text" id="formHp" class="form-control mb-2" placeholder="08xxxxxxxxxx" required>
+			
+			<label><i class="fas fa-envelope me-2"></i>Email:</label>
+			<input type="email" id="formEmail" class="form-control mb-2" placeholder="email@example.com" required>
+			
+			<label><i class="fas fa-map-marker-alt me-2"></i>Alamat Lengkap:</label>
+			<textarea id="formAlamat" class="form-control mb-3" rows="3" placeholder="Jalan, Kecamatan, Kota, Provinsi" required></textarea>
+			
+			<div class="cart-total mb-3" id="checkoutTotal"></div>
+			
+			<button class="btn btn-success w-100" onclick="kirimCheckoutWA()">
+				<i class="fab fa-whatsapp me-2"></i>Kirim Pesanan via WhatsApp
+			</button>
+		</div>
+	</div>
+
+	<script src="js/bootstrap.bundle.min.js"></script>
+	<script src="js/tiny-slider.js"></script>
+	<script src="js/custom.js"></script>
+	<script src="js/cart.js"></script>
+
+	<script>
+		// Intersection Observer untuk animasi scroll
+		const observerOptions = {
+			threshold: 0.1,
+			rootMargin: '0px 0px -100px 0px'
+		};
+
+		const observer = new IntersectionObserver((entries) => {
+			entries.forEach(entry => {
+				if (entry.isIntersecting) {
+					entry.target.style.opacity = '1';
+					entry.target.style.transform = 'translateY(0)';
+				}
+			});
+		}, observerOptions);
+
+		document.querySelectorAll('.animate-fade-in, .animate-scale-up, .animate-slide-left, .animate-slide-right').forEach(el => {
+			observer.observe(el);
+		});
+	</script>
+</body>
+</html>

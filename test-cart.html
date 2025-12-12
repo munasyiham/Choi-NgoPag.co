@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test Cart System - NgoPag.co</title>
+  <link href="css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+  <style>
+    body {
+      padding: 50px;
+      background: #f8f9fa;
+    }
+    .test-card {
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+    }
+    .status {
+      padding: 10px;
+      border-radius: 5px;
+      margin: 10px 0;
+    }
+    .status.success {
+      background: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+    .status.error {
+      background: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+    .btn-test {
+      margin: 5px;
+    }
+    .cart-item {
+      background: #f8f9fa;
+      padding: 15px;
+      border-radius: 10px;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    .cart-item img {
+      width: 60px;
+      height: 60px;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+    .cart-item-info {
+      flex: 1;
+    }
+    .qty-btn {
+      width: 30px;
+      height: 30px;
+      border: none;
+      background: #3b5d50;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .remove-btn {
+      background: #dc3545;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .popup-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+    }
+    .popup-box {
+      width: 90%;
+      max-width: 500px;
+      background: #fff;
+      padding: 25px;
+      border-radius: 15px;
+      position: relative;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+    .close-btn {
+      position: absolute;
+      right: 20px;
+      top: 15px;
+      background: transparent;
+      border: none;
+      font-size: 22px;
+      cursor: pointer;
+    }
+    .cart-total {
+      background: #3b5d50;
+      color: white;
+      padding: 15px;
+      border-radius: 10px;
+      text-align: center;
+      margin-top: 15px;
+      font-size: 18px;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h1 class="mb-4">🧪 Test Cart System NgoPag.co</h1>
+
+  <!-- Status Check -->
+  <div class="test-card">
+    <h3>📊 Status System</h3>
+    <div id="statusCheck"></div>
+    <button class="btn btn-primary btn-test" onclick="checkSystem()">Check System</button>
+    <button class="btn btn-warning btn-test" onclick="clearCart()">Clear Cart</button>
+  </div>
+
+  <!-- Test Add to Cart -->
+  <div class="test-card">
+    <h3>➕ Test Tambah ke Keranjang</h3>
+    <button class="btn btn-success btn-test" onclick="testAddProduct1()">
+      Add Gayo Wine (Rp 89.000)
+    </button>
+    <button class="btn btn-success btn-test" onclick="testAddProduct2()">
+      Add Watermelon Magic (Rp 423.000)
+    </button>
+    <button class="btn btn-success btn-test" onclick="testAddProduct3()">
+      Add Mango Macarons (Rp 89.000)
+    </button>
+  </div>
+
+  <!-- Cart Badge -->
+  <div class="test-card">
+    <h3>🛒 Cart Badge Counter</h3>
+    <div class="d-flex align-items-center gap-3">
+      <i class="fas fa-shopping-cart fa-3x"></i>
+      <span id="cartCount" style="background:red;color:white;padding:10px 15px;border-radius:50%;font-size:24px;">0</span>
+    </div>
+  </div>
+
+  <!-- View Cart -->
+  <div class="test-card">
+    <h3>👁️ View Cart</h3>
+    <button class="btn btn-info btn-test" onclick="bukaCart(event)">
+      <i class="fas fa-eye me-2"></i>Open Cart Preview
+    </button>
+    <button class="btn btn-warning btn-test" onclick="langkahCheckout()">
+      <i class="fas fa-shopping-bag me-2"></i>Go to Checkout
+    </button>
+  </div>
+
+  <!-- Cart Items Display -->
+  <div class="test-card">
+    <h3>📦 Current Cart Items</h3>
+    <div id="cartDisplay"></div>
+  </div>
+</div>
+
+<!-- CART PREVIEW POPUP -->
+<div id="cartPreview" class="popup-overlay">
+  <div class="popup-box">
+    <button class="close-btn" onclick="tutupCart()">✖</button>
+    <h3 class="text-center mb-4"><i class="fas fa-shopping-cart me-2"></i>Keranjang Belanja</h3>
+    <div id="cartItems"></div>
+  </div>
+</div>
+
+<!-- CHECKOUT POPUP -->
+<div id="checkoutModal" class="popup-overlay">
+  <div class="popup-box">
+    <button class="close-btn" onclick="tutupCheckout()">✖</button>
+    <h3 class="text-center mb-3"><i class="fas fa-clipboard-list me-2"></i>Form Pemesanan</h3>
+    
+    <label><i class="fas fa-user me-2"></i>Nama Lengkap:</label>
+    <input type="text" id="formNama" class="form-control mb-2" placeholder="Masukkan nama lengkap" required>
+    
+    <label><i class="fas fa-phone me-2"></i>No HP/WhatsApp:</label>
+    <input type="text" id="formHp" class="form-control mb-2" placeholder="08xxxxxxxxxx" required>
+    
+    <label><i class="fas fa-envelope me-2"></i>Email:</label>
+    <input type="email" id="formEmail" class="form-control mb-2" placeholder="email@example.com" required>
+    
+    <label><i class="fas fa-map-marker-alt me-2"></i>Alamat Lengkap:</label>
+    <textarea id="formAlamat" class="form-control mb-3" rows="3" placeholder="Jalan, Kecamatan, Kota, Provinsi" required></textarea>
+    
+    <div class="cart-total mb-3" id="checkoutTotal"></div>
+    
+    <button class="btn btn-success w-100" onclick="kirimCheckoutWA()">
+      <i class="fab fa-whatsapp me-2"></i>Kirim Pesanan via WhatsApp
+    </button>
+  </div>
+</div>
+
+<script src="js/bootstrap.bundle.min.js"></script>
+<script src="js/cart.js"></script>
+
+<script>
+// Test Functions
+function checkSystem() {
+  const status = document.getElementById('statusCheck');
+  let html = '';
+  
+  // Check localStorage
+  if (typeof(Storage) !== "undefined") {
+    html += '<div class="status success">✅ localStorage: Available</div>';
+  } else {
+    html += '<div class="status error">❌ localStorage: Not Available</div>';
+  }
+  
+  // Check cart.js functions
+  const functions = [
+    'tambahKeKeranjang',
+    'bukaCart',
+    'tutupCart',
+    'langkahCheckout',
+    'bukaCheckout',
+    'kirimCheckoutWA',
+    'tambahQty',
+    'kurangiQty',
+    'hapusItem'
+  ];
+  
+  functions.forEach(func => {
+    if (typeof window[func] === 'function') {
+      html += `<div class="status success">✅ ${func}: Loaded</div>`;
+    } else {
+      html += `<div class="status error">❌ ${func}: NOT Loaded</div>`;
+    }
+  });
+  
+  // Check cart data
+  const cart = JSON.parse(localStorage.getItem('cart')) || [];
+  html += `<div class="status success">📊 Cart Items: ${cart.length}</div>`;
+  
+  status.innerHTML = html;
+  displayCartItems();
+}
+
+function testAddProduct1() {
+  window.tambahKeKeranjang(1, 'Gayo Wine Specialty 200g', '89.000', 'images/Produk/p1.jpeg');
+  checkSystem();
+}
+
+function testAddProduct2() {
+  window.tambahKeKeranjang(2, 'Watermelon Magic 1Kg', '423.000', 'images/Produk/p2.jpeg');
+  checkSystem();
+}
+
+function testAddProduct3() {
+  window.tambahKeKeranjang(3, 'Mango Macarons 200g', '89.000', 'images/Produk/p3.jpeg');
+  checkSystem();
+}
+
+function clearCart() {
+  if (confirm('Clear all cart items?')) {
+    localStorage.removeItem('cart');
+    checkSystem();
+    alert('✅ Cart cleared!');
+  }
+}
+
+function displayCartItems() {
+  const cart = JSON.parse(localStorage.getItem('cart')) || [];
+  const display = document.getElementById('cartDisplay');
+  
+  if (cart.length === 0) {
+    display.innerHTML = '<p class="text-muted">Cart is empty</p>';
+  } else {
+    let html = '';
+    cart.forEach(item => {
+      html += `
+        <div class="alert alert-info">
+          <strong>${item.name}</strong><br>
+          Price: Rp ${item.price}<br>
+          Quantity: ${item.quantity}<br>
+          ID: ${item.id}
+        </div>
+      `;
+    });
+    display.innerHTML = html;
+  }
+}
+
+// Initial check
+document.addEventListener('DOMContentLoaded', function() {
+  checkSystem();
+  console.log('Test page loaded');
+});
+</script>
+
+</body>
+</html>
